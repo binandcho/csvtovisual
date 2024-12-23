@@ -1,2 +1,2 @@
 # csvtovisual
-Make csv data into visual mindmap.
+Make polygonscan csv data into visual mindmap.
