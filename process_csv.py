@@ -219,8 +219,8 @@ app_data = {
 
 # GUI 설정
 root = tk.Tk()
-root.title("Mindmap Generator")
-root.geometry("500x500")
+root.title("csvtovisual")
+root.geometry("500x400")
 root.resizable(False, False)
 
 # 아이콘 설정 (아이콘 파일 경로를 지정)
