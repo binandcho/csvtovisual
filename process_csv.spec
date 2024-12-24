@@ -4,7 +4,7 @@
 a = Analysis(
     ['process_csv.py'],
     pathex=[],
-    binaries=[('/opt/homebrew/bin/dot', '.')],
+    binaries=[],
     datas=[],
     hiddenimports=[],
     hookspath=[],
