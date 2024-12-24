@@ -4,7 +4,7 @@ from graphviz import Digraph
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from datetime import datetime
-import matplotlib.colors as mcolors
+import matplotlib.colors as mcolors  # type: ignore
 import random
 
 # Graphviz 실행 파일 경로 설정
@@ -74,7 +74,7 @@ def create_mindmap(file_path, output_file, excluded_dates):
 
         # PDF 파일 저장
         dot.render(output_file, format="pdf", cleanup=True)
-        messagebox.showinfo("완료", f"마인드맵이 {output_file}.pdf로 저장되었습니다.")
+        messagebox.showinfo("완료", f"마인드맵이 {output_file}로 저장되었습니다.")
     
     except Exception as e:
         messagebox.showerror("오류", f"파일 처리 중 오류가 발생했습니다: {e}")
@@ -100,6 +100,7 @@ def upload_file():
             f"{row['Date']} (Total Qty: {row['TotalQuantity']:.2f})"
             for _, row in app_data["available_dates"].iterrows()
         ]
+        update_save_button_state()
 
 
 def add_date():
@@ -127,14 +128,21 @@ def save_file():
     if "file_path" in app_data:
         current_date = datetime.now().strftime("%Y-%m-%d")
         output_file_path = filedialog.asksaveasfilename(
-            initialfile=f"csvconvert_{current_date}", filetypes=[("PDF files", "*.pdf")]
+            initialfile=f"csvconvert_{current_date}"
         )
         if output_file_path:
-            if not output_file_path.endswith(".pdf"):
-                output_file_path += ".pdf"
+            # 사용자가 파일 이름을 지정한 그대로 저장
             create_mindmap(app_data["file_path"], output_file_path, app_data["excluded_dates"])
     else:
         messagebox.showwarning("파일 없음", "먼저 CSV 파일을 업로드해 주세요.")
+
+
+def update_save_button_state():
+    """업로드된 파일 상태에 따라 저장 버튼 활성화/비활성화"""
+    if app_data["file_path"]:
+        save_button.config(state=tk.NORMAL)
+    else:
+        save_button.config(state=tk.DISABLED)
 
 
 # 앱 데이터 초기화
@@ -148,6 +156,9 @@ app_data = {
 root = tk.Tk()
 root.title("마인드맵 생성기")
 root.geometry("450x450")
+
+# 아이콘 설정 (아이콘 파일 경로를 지정)
+root.iconbitmap("path/to/your/icon.ico")  # 아이콘 파일 경로를 여기에 넣으세요.
 
 uploaded_file_label = tk.Label(root, text="업로드된 파일: 없음", width=40, height=2)
 uploaded_file_label.pack(pady=10)
@@ -167,7 +178,9 @@ excluded_dates_list.pack(pady=10)
 remove_date_button = tk.Button(root, text="선택 날짜 제거", command=remove_date, width=15)
 remove_date_button.pack(pady=5)
 
-save_button = tk.Button(root, text="변환하기", command=save_file, width=20, height=2)
+save_button = tk.Button(root, text="변환하기", command=save_file, width=20, height=2, state=tk.DISABLED)
 save_button.pack(pady=10)
+
+update_save_button_state()  # 초기 상태 업데이트
 
 root.mainloop()

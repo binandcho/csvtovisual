@@ -35,10 +35,11 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon.icns'],
 )
 app = BUNDLE(
     exe,
     name='process_csv.app',
-    icon=None,
+    icon='icon.icns',
     bundle_identifier=None,
 )
